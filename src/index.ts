@@ -1,6 +1,7 @@
 import express from 'express';
 import databaseService from './services/database.services';
 import userRouter from './routes/users.routes';
+import { defaultErrorHandler } from './middlewares/error.middlewares';
 
 const app = express();
 
@@ -15,6 +16,7 @@ app.get('/', (req, res) => {
 });
 
 app.use('/users', userRouter);
+app.use(defaultErrorHandler);
 
 app.listen(port, () => {
   console.log(`Listening on port ${port}`);

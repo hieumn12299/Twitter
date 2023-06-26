@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { checkSchema } from 'express-validator';
+import { USERS_MESSAGES } from '~/constants/messages';
 import usersService from '~/services/users.services';
 import { validate } from '~/utils/validation';
 
@@ -16,9 +17,9 @@ export const loginValidator = (req: Request, res: Response, next: NextFunction) 
 export const registerValidator = validate(
   checkSchema({
     name: {
-      notEmpty: { errorMessage: 'This field cannot be left blank.' },
+      notEmpty: { errorMessage: USERS_MESSAGES.NAME_IS_REQUIRED },
       isLength: {
-        errorMessage: 'This field must be between 1 and 100 characters long.',
+        errorMessage: USERS_MESSAGES.NAME_LENGTH_MUST_BE_FROM_1_TO_100,
         options: {
           min: 1,
           max: 100
@@ -27,32 +28,31 @@ export const registerValidator = validate(
       trim: true
     },
     email: {
-      notEmpty: { errorMessage: 'This field cannot be left blank.' },
-      isEmail: { errorMessage: 'This field must be a valid email address.' },
+      notEmpty: { errorMessage: USERS_MESSAGES.EMAIL_IS_REQUIRED },
+      isEmail: { errorMessage: USERS_MESSAGES.EMAIL_IS_INVALID },
       trim: true,
       custom: {
         options: async (value) => {
           const isExistEmail = await usersService.checkEmailExist(value);
           if (isExistEmail) {
-            throw new Error('Email already exists');
+            throw new Error(USERS_MESSAGES.EMAIL_ALREADY_EXISTS);
           }
           return true;
         }
       }
     },
     password: {
-      notEmpty: { errorMessage: 'This field cannot be left blank.' },
+      notEmpty: { errorMessage: USERS_MESSAGES.PASSWORD_IS_REQUIRED },
       isLength: {
-        errorMessage: 'Password must be 6-50 characters long.',
+        errorMessage: USERS_MESSAGES.PASSWORD_LENGTH_MUST_BE_FROM_6_TO_50,
         options: {
           min: 6,
           max: 50
         }
       },
-      isString: true,
+      isString: { errorMessage: USERS_MESSAGES.PASSWORD_MUST_BE_A_STRING },
       isStrongPassword: {
-        errorMessage:
-          'Password must be 6-50 characters long and include at least one uppercase letter, one lowercase letter, one digit, and one special character.',
+        errorMessage: USERS_MESSAGES.PASSWORD_MUST_BE_STRONG,
         options: {
           minLength: 6,
           minLowercase: 1,
@@ -63,18 +63,17 @@ export const registerValidator = validate(
       }
     },
     confirm_password: {
-      notEmpty: { errorMessage: 'This field cannot be left blank.' },
+      notEmpty: { errorMessage: USERS_MESSAGES.CONFIRM_PASSWORD_IS_REQUIRED },
       isLength: {
-        errorMessage: 'Password must be 6-50 characters long.',
+        errorMessage: USERS_MESSAGES.CONFIRM_PASSWORD_LENGTH_MUST_BE_FROM_6_TO_50,
         options: {
           min: 6,
           max: 50
         }
       },
-      isString: true,
+      isString: { errorMessage: USERS_MESSAGES.CONFIRM_PASSWORD_MUST_BE_A_STRING },
       isStrongPassword: {
-        errorMessage:
-          'Password must be 6-50 characters long and include at least one uppercase letter, one lowercase letter, one digit, and one special character.',
+        errorMessage: USERS_MESSAGES.CONFIRM_PASSWORD_MUST_BE_STRONG,
         options: {
           minLength: 6,
           minLowercase: 1,
@@ -86,7 +85,7 @@ export const registerValidator = validate(
       custom: {
         options: (value, { req }) => {
           if (value !== req.body.password) {
-            throw new Error('Password confirmation does not match password');
+            throw new Error(USERS_MESSAGES.CONFIRM_PASSWORD_MUST_BE_THE_SAME_AS_PASSWORD);
           }
           return true;
         }
@@ -94,7 +93,7 @@ export const registerValidator = validate(
     },
     date_of_birth: {
       isISO8601: {
-        errorMessage: 'This field must be a valid Date',
+        errorMessage: USERS_MESSAGES.DATE_OF_BIRTH_MUST_BE_ISO8601,
         options: {
           strict: true,
           strictSeparator: true
