@@ -5,7 +5,7 @@ import { wrapRequestHandler } from '~/utils/handlers';
 
 const userRouter = Router();
 
-userRouter.post('/login', loginValidator, loginController);
+userRouter.post('/login', loginValidator, wrapRequestHandler(loginController));
 
 /**
  * Description: Register a new user
