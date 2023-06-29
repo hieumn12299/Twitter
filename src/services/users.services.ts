@@ -7,6 +7,7 @@ import { TokenType } from '~/constants/enums';
 import RefreshToken from '~/models/schemas/RefreshToken.schema';
 import { ObjectId } from 'mongodb';
 import { config } from 'dotenv';
+import { USERS_MESSAGES } from '~/constants/messages';
 
 config();
 
@@ -29,7 +30,7 @@ class UsersService {
     });
   }
 
-  private signAccessandRefreshToken(user_id: string) {
+  private signAccessAndRefreshToken(user_id: string) {
     return Promise.all([this.signAccessToken(user_id), this.signRefreshToken(user_id)]);
   }
 
@@ -42,7 +43,7 @@ class UsersService {
       })
     );
     const user_id = result.insertedId.toString();
-    const [access_token, refresh_token] = await this.signAccessandRefreshToken(user_id);
+    const [access_token, refresh_token] = await this.signAccessAndRefreshToken(user_id);
     await databaseService.refreshTokens.insertOne(
       new RefreshToken({ user_id: new ObjectId(user_id), token: refresh_token })
     );
@@ -55,11 +56,18 @@ class UsersService {
   }
 
   async login(user_id: string) {
-    const [access_token, refresh_token] = await this.signAccessandRefreshToken(user_id);
+    const [access_token, refresh_token] = await this.signAccessAndRefreshToken(user_id);
     await databaseService.refreshTokens.insertOne(
       new RefreshToken({ user_id: new ObjectId(user_id), token: refresh_token })
     );
     return { access_token, refresh_token };
+  }
+
+  async logout(refresh_token: string) {
+    await databaseService.refreshTokens.deleteOne({ token: refresh_token });
+    return {
+      message: USERS_MESSAGES.LOGOUT_SUCCESS
+    };
   }
 }
 
