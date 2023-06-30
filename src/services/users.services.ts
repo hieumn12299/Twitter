@@ -69,6 +69,17 @@ class UsersService {
       message: USERS_MESSAGES.LOGOUT_SUCCESS
     };
   }
+
+  async refreshToken({ user_id, old_refresh_token }: { user_id: string; old_refresh_token: string }) {
+    const [access_token, refresh_token] = await this.signAccessAndRefreshToken(user_id);
+    await Promise.all([
+      databaseService.refreshTokens.deleteOne({ token: old_refresh_token }),
+      databaseService.refreshTokens.insertOne(
+        new RefreshToken({ user_id: new ObjectId(user_id), token: refresh_token })
+      )
+    ]);
+    return { access_token, refresh_token };
+  }
 }
 
 const usersService = new UsersService();
