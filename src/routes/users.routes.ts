@@ -11,6 +11,7 @@ import {
 import {
   accessTokenValidator,
   emailVerifyTokenValidator,
+  forgotPasswordValidator,
   loginValidator,
   refreshTokenValidator,
   registerValidator
@@ -72,5 +73,14 @@ userRouter.post('/verify-email', emailVerifyTokenValidator, wrapRequestHandler(v
  */
 
 userRouter.post('/resend-verify-email', accessTokenValidator, wrapRequestHandler(resendVerifyEmailController));
+
+/**
+ * Description: Submit email for reset password
+ * Path: /forgot-password
+ * Method: POST
+ * Body: { email: string }
+ */
+
+userRouter.post('/forgot-password', forgotPasswordValidator, wrapRequestHandler(forgotPasswordController));
 
 export default userRouter;
