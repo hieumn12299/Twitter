@@ -8,7 +8,8 @@ import {
   resendVerifyEmailController,
   forgotPasswordController,
   verifyForgotPasswordTokenController,
-  resetPasswordController
+  resetPasswordController,
+  meController
 } from '~/controllers/users.controllers';
 import {
   accessTokenValidator,
@@ -113,5 +114,14 @@ userRouter.post(
   resetPasswordValidator,
   wrapRequestHandler(resetPasswordController)
 );
+
+/**
+ * Description: Get my profile
+ * Path: /me
+ * Method: GET
+ * Header: { Authorization: Bearer <access_token> }
+ */
+
+userRouter.get('/me', accessTokenValidator, wrapRequestHandler(meController));
 
 export default userRouter;
