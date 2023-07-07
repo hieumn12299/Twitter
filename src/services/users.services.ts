@@ -144,6 +144,32 @@ class UsersService {
       message: USERS_MESSAGES.CHECK_EMAIL_TO_RESET_PASSWORD
     };
   }
+
+  async verifyForgotPasswordToken(user_id: string) {
+    await Promise.all([
+      this.signAccessAndRefreshToken(user_id),
+      databaseService.users.updateOne(
+        { _id: new ObjectId(user_id) },
+        { $set: { forgot_password_token: '', updated_at: new Date() } }
+      )
+    ]);
+    return {
+      message: USERS_MESSAGES.VERIFY_FORGOT_PASSWORD_SUCCESS
+    };
+  }
+
+  resetPassword = async (user_id: string, password: string) => {
+    await databaseService.users.updateOne(
+      { _id: new ObjectId(user_id) },
+      {
+        $set: { password: hashPassword(password), forgot_password_token: '' },
+        $currentDate: { updated_at: true }
+      }
+    );
+    return {
+      message: USERS_MESSAGES.RESET_PASSWORD_SUCCESS
+    };
+  };
 }
 
 const usersService = new UsersService();
