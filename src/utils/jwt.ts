@@ -1,4 +1,4 @@
-import jwt, { Secret, SignOptions } from 'jsonwebtoken';
+import jwt, { SignOptions } from 'jsonwebtoken';
 import { config } from 'dotenv';
 import { TokenPayload } from '~/models/requests/User.requests';
 
