@@ -11,7 +11,8 @@ import {
   resetPasswordController,
   meController,
   updateMeController,
-  getProfileController
+  getProfileController,
+  followController
 } from '~/controllers/users.controllers';
 import { filterMiddleware } from '~/middlewares/common.middlewares';
 import {
@@ -24,7 +25,8 @@ import {
   resetPasswordValidator,
   updateMeValidator,
   verifiedUserValidator,
-  verifyForgotPasswordTokenValidator
+  verifyForgotPasswordTokenValidator,
+  followValidator
 } from '~/middlewares/users.middlewares';
 import { UpdateMeReqBody } from '~/models/requests/User.requests';
 import { wrapRequestHandler } from '~/utils/handlers';
@@ -163,5 +165,21 @@ userRouter.patch(
  */
 
 userRouter.get('/:username', wrapRequestHandler(getProfileController));
+
+/**
+ * Description: Follow someone
+ * Path: /follow
+ * Method: POST
+ * Header: { Authorization: Bearer <access_token> }
+ * Body: { followed_user_id: string }
+ */
+
+userRouter.post(
+  '/follow',
+  accessTokenValidator,
+  verifiedUserValidator,
+  followValidator,
+  wrapRequestHandler(followController)
+);
 
 export default userRouter;

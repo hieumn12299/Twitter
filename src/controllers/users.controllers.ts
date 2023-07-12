@@ -5,6 +5,7 @@ import { UserVerifyStatus } from '~/constants/enums';
 import HTTP_STATUS from '~/constants/httpStatus';
 import { USERS_MESSAGES } from '~/constants/messages';
 import {
+  FollowReqBody,
   ForgotPasswordBody,
   GetProfileReqParams,
   LogoutReqBody,
@@ -127,4 +128,11 @@ export const getProfileController = async (req: Request<GetProfileReqParams>, re
     message: USERS_MESSAGES.GET_PROFILE_SUCCESS,
     result: user
   });
+};
+
+export const followController = async (req: Request<ParamsDictionary, any, FollowReqBody>, res: Response) => {
+  const { user_id } = req.decoded_authorization as TokenPayload;
+  const { followed_user_id } = req.body;
+  const result = await usersService.follow(user_id, followed_user_id);
+  res.json({ result });
 };
