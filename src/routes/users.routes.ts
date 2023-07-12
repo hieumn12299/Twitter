@@ -12,7 +12,8 @@ import {
   meController,
   updateMeController,
   getProfileController,
-  followController
+  followController,
+  unfollowController
 } from '~/controllers/users.controllers';
 import { filterMiddleware } from '~/middlewares/common.middlewares';
 import {
@@ -26,7 +27,8 @@ import {
   updateMeValidator,
   verifiedUserValidator,
   verifyForgotPasswordTokenValidator,
-  followValidator
+  followValidator,
+  unfollowValidator
 } from '~/middlewares/users.middlewares';
 import { UpdateMeReqBody } from '~/models/requests/User.requests';
 import { wrapRequestHandler } from '~/utils/handlers';
@@ -180,6 +182,21 @@ userRouter.post(
   verifiedUserValidator,
   followValidator,
   wrapRequestHandler(followController)
+);
+
+/**
+ * Description: UnFollow someone
+ * Path: /follow/user_id
+ * Method: DELETE
+ * Header: { Authorization: Bearer <access_token> }
+ */
+
+userRouter.delete(
+  '/follow/:user_id',
+  accessTokenValidator,
+  verifiedUserValidator,
+  unfollowValidator,
+  wrapRequestHandler(unfollowController)
 );
 
 export default userRouter;
