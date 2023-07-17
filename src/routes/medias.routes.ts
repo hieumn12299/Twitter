@@ -11,6 +11,6 @@ const mediaRouter = Router();
  * Body: { email: string, password: string }
  */
 
-mediaRouter.post('/upload-image', uploadSingleImageController);
+mediaRouter.post('/upload-image', wrapRequestHandler(uploadSingleImageController));
 
 export default mediaRouter;
