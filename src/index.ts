@@ -2,10 +2,15 @@ import express from 'express';
 import databaseService from './services/database.services';
 import userRouter from './routes/users.routes';
 import { defaultErrorHandler } from './middlewares/error.middlewares';
+import mediaRouter from './routes/medias.routes';
+import { initFolder } from './utils/file';
 
 const app = express();
 
 const port = 4100;
+
+//Taoj folder upload
+initFolder();
 
 databaseService.connect().catch(console.dir);
 
@@ -16,6 +21,7 @@ app.get('/', (req, res) => {
 });
 
 app.use('/users', userRouter);
+app.use('/medias', mediaRouter);
 app.use(defaultErrorHandler);
 
 app.listen(port, () => {
