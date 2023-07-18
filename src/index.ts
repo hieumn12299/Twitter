@@ -7,6 +7,7 @@ import { initFolder } from './utils/file';
 import { config } from 'dotenv';
 import path from 'path';
 import { UPLOAD_DIR } from './constants/dir';
+import staticRouter from './routes/static.routes';
 config();
 
 const app = express();
@@ -26,7 +27,8 @@ app.get('/', (req, res) => {
 
 app.use('/users', userRouter);
 app.use('/medias', mediaRouter);
-app.use('/static', express.static(path.resolve(UPLOAD_DIR)));
+app.use('/static', staticRouter);
+// app.use('/static', express.static(path.resolve(UPLOAD_DIR)));
 app.use(defaultErrorHandler);
 
 app.listen(port, () => {
