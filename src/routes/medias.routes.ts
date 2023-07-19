@@ -1,16 +1,36 @@
 import { Router } from 'express';
-import { uploadSingleImageController } from '~/controllers/medias.controllers';
+import { uploadImageController, uploadVideoController } from '~/controllers/medias.controllers';
+import { accessTokenValidator, verifiedUserValidator } from '~/middlewares/users.middlewares';
 import { wrapRequestHandler } from '~/utils/handlers';
 
 const mediaRouter = Router();
 
 /**
- * Description: Login a user
- * Path: /login
+ * Description: Upload image
+ * Path: /upload-image
  * Method: POST
- * Body: { email: string, password: string }
+ * Body: { image: File }
  */
 
-mediaRouter.post('/upload-image', wrapRequestHandler(uploadSingleImageController));
+mediaRouter.post(
+  '/upload-image',
+  accessTokenValidator,
+  verifiedUserValidator,
+  wrapRequestHandler(uploadImageController)
+);
+
+/**
+ * Description: Upload video
+ * Path: /upload-video
+ * Method: POST
+ * Body: { video: File }
+ */
+
+mediaRouter.post(
+  '/upload-video',
+  accessTokenValidator,
+  verifiedUserValidator,
+  wrapRequestHandler(uploadVideoController)
+);
 
 export default mediaRouter;
