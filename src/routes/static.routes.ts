@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { serveImageController, serveVideoController } from '~/controllers/medias.controllers';
+import { serveImageController, serveStreamVideoController } from '~/controllers/medias.controllers';
 import { wrapRequestHandler } from '~/utils/handlers';
 
 const staticRouter = Router();
@@ -13,9 +13,9 @@ staticRouter.get('/image/:name', wrapRequestHandler(serveImageController));
 
 /**
  * Description: Serve video
- * Path: /video/:name
+ * Path: /video-stream/:name
  */
 
-staticRouter.get('/video/:name', wrapRequestHandler(serveVideoController));
+staticRouter.get('/video-stream/:name', wrapRequestHandler(serveStreamVideoController));
 
 export default staticRouter;

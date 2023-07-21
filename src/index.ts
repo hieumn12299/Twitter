@@ -6,7 +6,7 @@ import mediaRouter from './routes/medias.routes';
 import { initFolder } from './utils/file';
 import { config } from 'dotenv';
 import path from 'path';
-import { UPLOAD_IMAGE_DIR } from './constants/dir';
+import { UPLOAD_IMAGE_DIR, UPLOAD_VIDEO_DIR } from './constants/dir';
 import staticRouter from './routes/static.routes';
 config();
 
@@ -28,7 +28,7 @@ app.get('/', (req, res) => {
 app.use('/users', userRouter);
 app.use('/medias', mediaRouter);
 app.use('/static', staticRouter);
-// app.use('/static', express.static(path.resolve(UPLOAD_IMAGE_DIR)));
+// app.use('/static/video', express.static(path.resolve(UPLOAD_VIDEO_DIR)));
 app.use(defaultErrorHandler);
 
 app.listen(port, () => {
