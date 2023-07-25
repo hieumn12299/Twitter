@@ -8,6 +8,7 @@ import { config } from 'dotenv';
 import path from 'path';
 import { UPLOAD_IMAGE_DIR, UPLOAD_VIDEO_DIR } from './constants/dir';
 import staticRouter from './routes/static.routes';
+import tweetsRouter from './routes/tweets.routes';
 config();
 
 const app = express();
@@ -28,6 +29,7 @@ app.get('/', (req, res) => {
 app.use('/users', userRouter);
 app.use('/medias', mediaRouter);
 app.use('/static', staticRouter);
+app.use('/tweets', tweetsRouter);
 // app.use('/static/video', express.static(path.resolve(UPLOAD_VIDEO_DIR)));
 app.use(defaultErrorHandler);
 
