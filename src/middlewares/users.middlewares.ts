@@ -475,6 +475,7 @@ export const updateMeValidator = validate(
             if (user) {
               throw new Error(USERS_MESSAGES.USERNAME_EXISTED);
             }
+            return true;
           }
         }
       },
@@ -518,6 +519,7 @@ export const changePasswordValidator = validate(
             if (!user) {
               throw new Error(USERS_MESSAGES.OLD_PASSWORD_NOT_MATCH);
             }
+            return true;
           }
         }
       },
